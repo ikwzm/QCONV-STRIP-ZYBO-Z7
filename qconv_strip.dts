@@ -1,0 +1,59 @@
+/dts-v1/; /plugin/;
+/ {
+	fragment@0 {
+		target-path = "/amba";
+		__overlay__ {
+			fclk0 {
+				compatible    = "ikwzm,fclkcfg-0.10.a";
+				clocks        = <&clkc 15>;
+				insert-rate   = "100000000";
+				insert-enable = <1>;
+				remove-rate   = "1000000";
+				remove-enable = <0>;
+			};
+		};
+	};
+	fragment@1 {
+		target-path = "/amba/fpga-region0";
+		#address-cells = <0x1>;
+		#size-cells = <0x1>;
+		
+		__overlay__ {
+			#address-cells = <0x1>;
+			#size-cells = <0x1>;
+
+			firmware-name = "qconv_strip_axi3.bin";
+			
+			uio_qconv_strip {
+				compatible = "generic-uio";
+				reg = <0x43c10000 0x1000>;
+				interrupts = <0x0 0x1d 0x4>;
+				interrupt-parent = <&intc>;
+	                };
+
+			udmabuf_qconv_in {
+				compatible  = "ikwzm,udmabuf-0.10.a";
+				device-name = "udmabuf-qconv-in";
+				size = <0x00400000>;
+	                };
+
+			udmabuf_qconv_out {
+				compatible = "ikwzm,udmabuf-0.10.a";
+				device-name = "udmabuf-qconv-out";
+				size = <0x00800000>;
+			};
+			
+			udmabuf_qconv_k {
+				compatible = "ikwzm,udmabuf-0.10.a";
+				device-name = "udmabuf-qconv-k";
+				size = <0x00400000>;
+			};
+
+			udmabuf_qconv_th {
+				compatible = "ikwzm,udmabuf-0.10.a";
+				device-name = "udmabuf-qconv-th";
+				size = <0x0010000>;
+			};
+                };
+	} ;
+} ;
