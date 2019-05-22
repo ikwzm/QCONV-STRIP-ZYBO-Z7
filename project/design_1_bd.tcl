@@ -130,15 +130,27 @@ proc create_root_design { parentCell } {
   set LED4_AXI_0 [ create_bd_cell -type ip -vlnv ikwzm:pipework:LED4_AXI:1.0 LED4_AXI_0 ]
 
   # Create instance: QCONV_STRIP_AXI3_0, and set properties
-  set QCONV_STRIP_AXI3_0 [ create_bd_cell -type ip -vlnv ikwzm:pipework:QCONV_STRIP_AXI3:1.0 QCONV_STRIP_AXI3_0 ]
+  set QCONV_STRIP_AXI3_0 [ create_bd_cell -type ip -vlnv ikwzm:QCONV:QCONV_STRIP_AXI3:2.0 QCONV_STRIP_AXI3_0 ]
   set_property -dict [ list \
    CONFIG.IO_AXI_ID_WIDTH {1} \
-   CONFIG.IO_AXI_USER_WIDTH {1} \
+   CONFIG.IO_AXI_USER_WIDTH {5} \
+   CONFIG.I_AXI_AUSER {1} \
+   CONFIG.I_AXI_CACHE {15} \
+   CONFIG.I_AXI_PROT {0} \
+   CONFIG.O_AXI_AUSER {1} \
+   CONFIG.O_AXI_CACHE {15} \
+   CONFIG.O_AXI_PROT {0} \
    CONFIG.K_AXI_ID_WIDTH {1} \
-   CONFIG.K_AXI_USER_WIDTH {1} \
-   CONFIG.S_AXI_ADDR_WIDTH {12} \
+   CONFIG.K_AXI_USER_WIDTH {5} \
+   CONFIG.K_AXI_AUSER {1} \
+   CONFIG.K_AXI_CACHE {15} \
+   CONFIG.K_AXI_PROT {0} \
    CONFIG.T_AXI_ID_WIDTH {1} \
-   CONFIG.T_AXI_USER_WIDTH {1} \
+   CONFIG.T_AXI_USER_WIDTH {5} \
+   CONFIG.T_AXI_AUSER {1} \
+   CONFIG.T_AXI_CACHE {15} \
+   CONFIG.T_AXI_PROT {0} \
+   CONFIG.S_AXI_ADDR_WIDTH {12} \
  ] $QCONV_STRIP_AXI3_0
 
   # Create instance: axi_interconnect_csr, and set properties
@@ -149,7 +161,12 @@ proc create_root_design { parentCell } {
   set_property -dict [ list \
    CONFIG.NUM_MI {1} \
    CONFIG.NUM_SI {3} \
- ] $axi_interconnect_acp
+   CONFIG.M00_HAS_DATA_FIFO {2} \
+   CONFIG.M00_HAS_REGSLICE {1}  \
+   CONFIG.S00_HAS_REGSLICE {1}  \
+   CONFIG.S01_HAS_REGSLICE {1}  \
+   CONFIG.S02_HAS_REGSLICE {1}  \
+  ] $axi_interconnect_acp
 
   # Create instance: proc_sys_reset_0, and set properties
   set proc_sys_reset_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_0 ]

@@ -3,7 +3,7 @@
 #
 set ip_name                 "qconv_strip_axi3_0.1"
 set ip_vendor_name          "ikwzm"
-set ip_library_name         "pipework"
+set ip_library_name         "QCONV"
 set ip_root_directory       [file join [file dirname [info script]] $ip_name]
 set project_name            "qconv_strip_axi3"
 set project_directory       [file join [file dirname [info script]] "work"]

@@ -37,12 +37,6 @@ bootmenu_0=Boot linux-4.14.34-armv7-fpga=boot
 
 ### Login fpga user
 
-### Install g++
-
-```console
-fpga% sudo apt-get install g++
-```
-
 ### Download QCONV-STRIP-ZYBO-Z7 to ZYBO-Z7
 
 ```console
@@ -72,9 +66,33 @@ shell$ cd QCONV-STRIP-ZYBO-Z7
 shell$ git submodule update --init --recursive
 ```
 
-### Build design_1_wrapper.bit
+### Build qconv_strip_axi3.bin
 
-(T.B.D)
+#### Download QCONV-STRIP-ZYBO-Z7
+
+```console
+shell$ git clone https://github.com/ikwzm/QCONV-STRIP-ZYBO-Z7.git
+shell$ cd QCONV-STRIP-ZYBO-Z7
+shell$ git submodule update --init --recursive
+```
+
+#### Create Project
+
+```
+Vivado > Tools > Run Tcl Script > project/create_project.tcl
+```
+
+#### Implementation
+
+```
+Vivado > Tools > Run Tcl Script > project/implementation.tcl
+```
+
+#### Convert from Bitstream File to Binary File
+
+```
+shell$ tools/fpga-bit-to-bin.py --flip project/project.runs/impl_1/design_1_wrapper.bit qconv_strip_axi3.bin
+```
 
 ## Licensing
 
