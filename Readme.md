@@ -16,24 +16,35 @@ Quantized Convolution is a convolution method published by LeapMind Inc(https://
 
 See https://github.com/ikwzm/FPGA-SoC-Linux
 
+### Boot ZynqMP-FPGA-Linux
+
 ### Expand the CMA area
 
-Add ```cma=256M``` to linux_boot_args in uEnv.txt.
+Add ```cma=256M``` to linux_boot_args_cma in /mnt/boot/uEnv.txt
 
 ```
-linux_kernel_image=vmlinuz-4.14.34-armv7-fpga
-linux_fdt_image=devicetree-4.14.34-socfpga.dtb
-linux_boot_args=console=ttyS0,115200 root=/dev/mmcblk0p2 rw rootwait uio_pdrv_genirq.of_id=generic-uio cma=256M
-
-linux_load_cmd=fatload mmc 0 ${loadaddr} ${linux_kernel_image} && fatload mmc 0 ${fdt_addr} ${linux_fdt_image}
-linux_boot_cmd=setenv bootargs ${linux_boot_args} && bootz ${loadaddr} - ${fdt_addr}
-
-uenvcmd=run linux_load_cmd && run linux_boot_cmd
-
-bootmenu_0=Boot linux-4.14.34-armv7-fpga=boot
+########################################################################
+# Linux Boot Argments
+#  * linux_boot_args_console : ex) console=tty1
+#                                  console=ttyPS0,115200
+#  * linux_boot_args_rootfs  : ex) root=/dev/mmcblk0p2 rw rootwait
+#  * linux_boot_args_systemd : ex) systemd.unit=graphical.target
+#                                  systemd.unit=multi-user.target
+#  * linux_boot_args_cpuidle : ex) cpuidle.off=1
+#  * linux_boot_args_cma     : ex) cma=256M
+#  * linux_boot_args_uio     : ex) uio=uio_pdrv_genirq.of_id=generic-uio
+#  * linux_boot_args_other   :
+########################################################################
+linux_boot_args_console=console=ttyPS0,115200
+linux_boot_args_rootfs=root=/dev/mmcblk0p2 rw rootwait
+linux_boot_args_systemd=
+linux_boot_args_cpuidle=
+linux_boot_args_cma=cma=256M
+linux_boot_args_uio=uio_pdrv_genirq.of_id=generic-uio
+linux_boot_args_other=
 ```
 
-### Boot FPGA-SoC-Linux
+### Reboot FPGA-SoC-Linux
 
 ### Login fpga user
 
@@ -48,46 +59,44 @@ fpga@debian-fpga:~/$ cd QCONV-STRIP-ZYBO-Z7
 
 ```console
 fpga@debian-fpga:~/QCONV-STRIP-ZYBO-Z7$ sudo rake install
-sudo: unable to resolve host debian-fpga
-dtbocfg.rb --install qconv_strip --dts qconv_strip.dts
-/config/device-tree/overlays/qconv_strip/dtbo: Warning (unit_address_vs_reg): Node /fragment@0 has a unit name, but no reg property
-/config/device-tree/overlays/qconv_strip/dtbo: Warning (unit_address_vs_reg): Node /fragment@1 has a unit name, but no reg property
-/config/device-tree/overlays/qconv_strip/dtbo: Warning (unit_address_vs_reg): Node /fragment@1/__overlay__/uio_qconv_strip has a reg or ranges property, but no unit name
-[ 2164.917900] fclkcfg amba:fclk0: driver installed.
-[ 2164.923899] fclkcfg amba:fclk0: device name    : fclk0
-[ 2164.936321] fclkcfg amba:fclk0: clock  name    : fclk0
-[ 2164.945180] fclkcfg amba:fclk0: clock  rate    : 99999999
-[ 2164.956712] fclkcfg amba:fclk0: clock  enabled : 1
-[ 2164.966703] fclkcfg amba:fclk0: remove rate    : 1000000
-[ 2164.977333] fclkcfg amba:fclk0: remove enable  : 0
-[ 2165.007088] udmabuf udmabuf-qconv-in: driver version = 1.3.2
-[ 2165.012697] udmabuf udmabuf-qconv-in: major number   = 245
-[ 2165.018206] udmabuf udmabuf-qconv-in: minor number   = 0
-[ 2165.023453] udmabuf udmabuf-qconv-in: phys address   = 0x38100000
-[ 2165.029567] udmabuf udmabuf-qconv-in: buffer size    = 4194304
-[ 2165.035342] udmabuf udmabuf-qconv-in: dma coherent   = 0
-[ 2165.040798] udmabuf amba:fpga-region0:udmabuf_qconv_in: driver installed.
-[ 2165.074729] udmabuf udmabuf-qconv-out: driver version = 1.3.2
-[ 2165.080462] udmabuf udmabuf-qconv-out: major number   = 245
-[ 2165.085962] udmabuf udmabuf-qconv-out: minor number   = 1
-[ 2165.093996] udmabuf udmabuf-qconv-out: phys address   = 0x38500000
-[ 2165.100976] udmabuf udmabuf-qconv-out: buffer size    = 8388608
-[ 2165.107678] udmabuf udmabuf-qconv-out: dma coherent   = 0
-[ 2165.113012] udmabuf amba:fpga-region0:udmabuf_qconv_out: driver installed.
-[ 2165.137698] udmabuf udmabuf-qconv-k: driver version = 1.3.2
-[ 2165.143216] udmabuf udmabuf-qconv-k: major number   = 245
-[ 2165.150466] udmabuf udmabuf-qconv-k: minor number   = 2
-[ 2165.155633] udmabuf udmabuf-qconv-k: phys address   = 0x38d00000
-[ 2165.163294] udmabuf udmabuf-qconv-k: buffer size    = 4194304
-[ 2165.169888] udmabuf udmabuf-qconv-k: dma coherent   = 0
-[ 2165.175048] udmabuf amba:fpga-region0:udmabuf_qconv_k: driver installed.
-[ 2165.186437] udmabuf udmabuf-qconv-th: driver version = 1.3.2
-[ 2165.192058] udmabuf udmabuf-qconv-th: major number   = 245
-[ 2165.197571] udmabuf udmabuf-qconv-th: minor number   = 3
-[ 2165.202817] udmabuf udmabuf-qconv-th: phys address   = 0x38050000
-[ 2165.208944] udmabuf udmabuf-qconv-th: buffer size    = 65536
-[ 2165.214541] udmabuf udmabuf-qconv-th: dma coherent   = 0
-[ 2165.219885] udmabuf amba:fpga-region0:udmabuf_qconv_th: driver installed.
+cp qconv_strip_axi3.bin /lib/firmware/qconv_strip_axi3.bin
+dtbocfg.rb --install qconv_strip --dts qconv_strip_axi3_5.4.dts
+<stdin>:26.20-31.20: Warning (unit_address_vs_reg): /fragment@1/__overlay__/uio_qconv_strip: node has a reg or ranges property, but no unit name
+<stdin>:10.13-57.5: Warning (avoid_unnecessary_addr_size): /fragment@1: unnecessary #address-cells/#size-cells without "ranges" or child "reg" property
+[  436.805790] fpga_manager fpga0: writing qconv_strip_axi3.bin to Xilinx Zynq FPGA Manager
+[  436.882846] OF: overlay: WARNING: memory leak will occur if overlay removed, property: /amba/fpga-region0/firmware-name
+[  436.896755] fclkcfg amba:fclk0: driver version : 1.7.2
+[  436.903441] fclkcfg amba:fclk0: device name    : amba:fclk0
+[  436.909033] fclkcfg amba:fclk0: clock  name    : fclk0
+[  436.914326] fclkcfg amba:fclk0: clock  rate    : 99999999
+[  436.919720] fclkcfg amba:fclk0: clock  enabled : 1
+[  436.924598] fclkcfg amba:fclk0: remove rate    : 1000000
+[  436.929909] fclkcfg amba:fclk0: remove enable  : 0
+[  436.934765] fclkcfg amba:fclk0: driver installed.
+[  436.968053] u-dma-buf udmabuf-qconv-in: driver version = 3.2.2
+[  436.973934] u-dma-buf udmabuf-qconv-in: major number   = 244
+[  436.979584] u-dma-buf udmabuf-qconv-in: minor number   = 0
+[  436.985124] u-dma-buf udmabuf-qconv-in: phys address   = 0x30100000
+[  436.991431] u-dma-buf udmabuf-qconv-in: buffer size    = 4194304
+[  436.997431] u-dma-buf amba:udmabuf_qconv_in: driver installed.
+[  437.036730] u-dma-buf udmabuf-qconv-out: driver version = 3.2.2
+[  437.042716] u-dma-buf udmabuf-qconv-out: major number   = 244
+[  437.048460] u-dma-buf udmabuf-qconv-out: minor number   = 1
+[  437.054085] u-dma-buf udmabuf-qconv-out: phys address   = 0x30500000
+[  437.060439] u-dma-buf udmabuf-qconv-out: buffer size    = 8388608
+[  437.066582] u-dma-buf amba:udmabuf_qconv_out: driver installed.
+[  437.102665] u-dma-buf udmabuf-qconv-k: driver version = 3.2.2
+[  437.108415] u-dma-buf udmabuf-qconv-k: major number   = 244
+[  437.114040] u-dma-buf udmabuf-qconv-k: minor number   = 2
+[  437.119438] u-dma-buf udmabuf-qconv-k: phys address   = 0x30d00000
+[  437.125655] u-dma-buf udmabuf-qconv-k: buffer size    = 4194304
+[  437.131614] u-dma-buf amba:udmabuf_qconv_k: driver installed.
+[  437.142001] u-dma-buf udmabuf-qconv-th: driver version = 3.2.2
+[  437.147832] u-dma-buf udmabuf-qconv-th: major number   = 244
+[  437.153612] u-dma-buf udmabuf-qconv-th: minor number   = 3
+[  437.159097] u-dma-buf udmabuf-qconv-th: phys address   = 0x30050000
+[  437.165422] u-dma-buf udmabuf-qconv-th: buffer size    = 65536
+[  437.171337] u-dma-buf amba:udmabuf_qconv_th: driver installed.
 ```
 
 ### Run Unit Test
@@ -95,13 +104,13 @@ dtbocfg.rb --install qconv_strip --dts qconv_strip.dts
 ```console
 fpga@debian-fpga:~/QCONV-STRIP-ZYBO-Z7$ rake unit_test2_all
 ./unit_test -iw 160 -ih 160 -ic 64 -oc 32 -kw 1 -kh 1 -th 1 random
-FPGA exec time (160x160x64x32 1x1): 3441 [usec]
+FPGA exec time (160x160x64x32 1x1): 3440 [usec]
 [qconv_strip] test success!!!
 ./unit_test -iw 160 -ih 160 -ic 32 -oc 8 -kw 3 -kh 3 -th 1 random
-FPGA exec time (160x160x32x8 3x3): 893 [usec]
+FPGA exec time (160x160x32x8 3x3): 895 [usec]
 [qconv_strip] test success!!!
 ./unit_test -iw 80 -ih 80 -ic 32 -oc 16 -kw 3 -kh 3 -th 1 random
-FPGA exec time (80x80x32x16 3x3): 453 [usec]
+FPGA exec time (80x80x32x16 3x3): 452 [usec]
 [qconv_strip] test success!!!
 ./unit_test -iw 40 -ih 40 -ic 64 -oc 32 -kw 3 -kh 3 -th 1 random
 FPGA exec time (40x40x64x32 3x3): 242 [usec]
@@ -110,38 +119,52 @@ FPGA exec time (40x40x64x32 3x3): 242 [usec]
 FPGA exec time (20x20x128x64 3x3): 173 [usec]
 [qconv_strip] test success!!!
 ./unit_test -iw 10 -ih 10 -ic 256 -oc 128 -kw 3 -kh 3 -th 1 random
-FPGA exec time (10x10x256x128 3x3): 242 [usec]
+FPGA exec time (10x10x256x128 3x3): 237 [usec]
 [qconv_strip] test success!!!
 ./unit_test -iw 5 -ih 5 -ic 512 -oc 128 -kw 3 -kh 3 -th 1 random
-FPGA exec time (5x5x512x128 3x3): 275 [usec]
+FPGA exec time (5x5x512x128 3x3): 278 [usec]
 [qconv_strip] test success!!!
 ./unit_test -iw 5 -ih 5 -ic 128 -oc 256 -kw 3 -kh 3 -th 1 random
 FPGA exec time (5x5x128x256 3x3): 146 [usec]
 [qconv_strip] test success!!!
 ./unit_test -iw 10 -ih 10 -ic 128 -oc 32 -kw 1 -kh 1 -th 1 random
-FPGA exec time (10x10x128x32 1x1): 31 [usec]
+FPGA exec time (10x10x128x32 1x1): 30 [usec]
 [qconv_strip] test success!!!
 ./unit_test -iw 20 -ih 20 -ic 64 -oc 16 -kw 1 -kh 1 -th 1 random
-FPGA exec time (20x20x64x16 1x1): 47 [usec]
+FPGA exec time (20x20x64x16 1x1): 46 [usec]
 [qconv_strip] test success!!!
 ./unit_test -iw 40 -ih 40 -ic 32 -oc 4 -kw 1 -kh 1 -th 1 random
-FPGA exec time (40x40x32x4 1x1): 52 [usec]
+FPGA exec time (40x40x32x4 1x1): 51 [usec]
 [qconv_strip] test success!!!
 ./unit_test -iw 5 -ih 5 -ic 1024 -oc 256 -kw 3 -kh 3 -th 1 random
-FPGA exec time (5x5x1024x256 3x3): 1190 [usec]
+FPGA exec time (5x5x1024x256 3x3): 1174 [usec]
 [qconv_strip] test success!!!
 ./unit_test -iw 5 -ih 5 -ic 256 -oc 128 -kw 3 -kh 3 -th 1 random
 FPGA exec time (5x5x256x128 3x3): 145 [usec]
 [qconv_strip] test success!!!
 ./unit_test -iw 5 -ih 5 -ic 128 -oc 256 -kw 3 -kh 3 -th 1 random
-FPGA exec time (5x5x128x256 3x3): 146 [usec]
+FPGA exec time (5x5x128x256 3x3): 141 [usec]
 [qconv_strip] test success!!!
 ./unit_test -iw 5 -ih 5 -ic 256 -oc 128 -kw 3 -kh 3 -th 1 random
-FPGA exec time (5x5x256x128 3x3): 146 [usec]
+FPGA exec time (5x5x256x128 3x3): 143 [usec]
 [qconv_strip] test success!!!
 ./unit_test -iw 5 -ih 5 -ic 128 -oc 256 -kw 3 -kh 3 -th 1 random
-FPGA exec time (5x5x128x256 3x3): 143 [usec]
+FPGA exec time (5x5x128x256 3x3): 142 [usec]
 [qconv_strip] test success!!!
+```
+
+## Uninstall
+
+### Uninstall Device Tree
+
+```console
+fpga@debian-fpga:~/QCONV-STRIP-ZYBO-Z7$ rake uninstall
+dtbocfg.rb --remove qconv_strip
+[ 1026.409279] u-dma-buf amba:udmabuf_qconv_th: driver removed.
+[ 1026.417139] u-dma-buf amba:udmabuf_qconv_k: driver removed.
+[ 1026.427597] u-dma-buf amba:udmabuf_qconv_out: driver removed.
+[ 1026.435293] u-dma-buf amba:udmabuf_qconv_in: driver removed.
+[ 1026.443312] fclkcfg amba:fclk0: driver removed.
 ```
 
 ## Build Bitstream file
