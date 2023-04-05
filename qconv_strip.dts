@@ -1,14 +1,14 @@
 /dts-v1/; /plugin/;
 / {
 	fragment@0 {
-		target-path = "/amba/fpga-region0";
+		target = <&fpga_region0>;
 		__overlay__ {
 			firmware-name = "qconv_strip_axi3.bin";
 		};
 	};
 
 	fragment@1 {
-		target-path = "/amba";
+		target = <&amba>;
 		#address-cells = <1>;
 		#size-cells = <1>;
 		__overlay__ {
