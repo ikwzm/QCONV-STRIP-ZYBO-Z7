@@ -93,6 +93,7 @@ public:
       status = false;
       return false;
     }
+    return true;
   }  
 
   Uio(const std::string& _name) :
